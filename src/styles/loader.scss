@@ -1,0 +1,79 @@
+.loader-container {
+	position: fixed;
+
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	opacity: 0;
+	// display: none;
+
+	transition: all 0.5s ease;
+
+	display: grid;
+	justify-content: center;
+	align-content: center;
+
+	background-color: rgba(254, 254, 254, 0.5);
+	opacity: 1;
+	z-index: 99999;
+
+	.loader-content {
+		position: relative;
+		.loader {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			overflow: hidden;
+			height: 80px;
+			width: 80px;
+			border: 1px solid transparent;
+			box-shadow: 0 0 0 2px #e91f63;
+			border-radius: 50%;
+
+			.waves {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+				background: #fa7c91;
+				box-shadow: inset 0 0 50px rgb(0, 0, 0, 0.3);
+			}
+
+			&:before,
+			&:after {
+				content: '';
+				position: absolute;
+				width: 200%;
+				height: 200%;
+				top: 0;
+				left: 50%;
+				transform: translate(-50%, -75%);
+				background: #000;
+			}
+
+			&:before {
+				border-radius: 45%;
+				background: rgb(248, 248, 248);
+				animation: wave91234 5s linear infinite;
+			}
+
+			&:after {
+				border-radius: 40%;
+				background: rgb(255, 255, 255, 0.5);
+				animation: wave91234 10s linear infinite;
+			}
+		}
+	}
+}
+
+@keyframes wave91234 {
+	0% {
+		transform: translate(-50%, -75%) rotate(0deg);
+	}
+
+	100% {
+		transform: translate(-50%, -75%) rotate(360deg);
+	}
+}
