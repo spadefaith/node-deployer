@@ -12,6 +12,7 @@ export const load = (async (event) => {
 		return accu;
 	}, {});
 
+	console.log(15, rawCookies);
 	console.log(16, cookies);
 	if (!cookies['x-token']) {
 		return redirect(302, '/redirect?redirect_url=/logout');
