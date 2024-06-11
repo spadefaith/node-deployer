@@ -24,7 +24,13 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 	const data = props.data;
 	const name = data.name;
 	const appName = `${name}-${data.branch}`;
-	const root = path.join(__dirname, `../../../../../apps/${appName}`);
+
+	let p = '../../../../../apps';
+	if (AppConfig.IS_BUILD) {
+		p = '../../../../apps';
+	}
+
+	const root = path.join(__dirname, `${p}/${appName}`);
 
 	console.log(29, root);
 
