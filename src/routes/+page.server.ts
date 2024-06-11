@@ -24,6 +24,7 @@ export const load = (async (event) => {
 			return redirect(302, '/redirect?redirect_url=/logout');
 		}
 	} catch (err) {
+		console.log(27, err);
 		return redirect(302, '/redirect?redirect_url=/logout');
 	}
 
