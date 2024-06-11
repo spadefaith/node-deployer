@@ -285,10 +285,11 @@
 				isLoading = true;
 				const url = createUrl(`${location.origin}/api/app/redeploy`, { app_id: data.app_id });
 				const response = await Fetch(url, {
-					method: 'GET',
+					method: 'POST',
 					headers: {
 						'content-type': 'application/json'
-					}
+					},
+					body: JSON.stringify({})
 				});
 
 				isLoading = false;
