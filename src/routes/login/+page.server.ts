@@ -35,6 +35,8 @@ export const actions = {
 
 		const token = jwt.sign({}, 'deployer', { expiresIn: `${15 * 60 * 1000}` });
 
+		console.log(19, token);
+
 		event.cookies.set('x-token', token, {
 			httpOnly: true,
 			path: '/',
@@ -42,6 +44,7 @@ export const actions = {
 			secure: true
 		});
 
+		console.log(20, 'redirect /redirect?redirect_url=/');
 		redirect(302, '/redirect?redirect_url=/');
 	}
 };
