@@ -23,14 +23,14 @@ export const actions = {
 		});
 
 		if (!find) {
-			return fail(400, { message: 'account not found', error: true });
+			throw fail(400, { message: 'account not found', error: true });
 		}
 		console.log(18, find);
 
 		const compare = bcrypt.compareSync(password, find.password);
 
 		if (!compare) {
-			return fail(400, { message: 'wrong password', error: true });
+			throw fail(400, { message: 'wrong password', error: true });
 		}
 
 		const token = jwt.sign({}, 'deployer', { expiresIn: `${15 * 60 * 1000}` });
@@ -45,6 +45,6 @@ export const actions = {
 		});
 
 		console.log(20, 'redirect /redirect?redirect_url=/');
-		redirect(302, '/redirect?redirect_url=/');
+		throw redirect(302, '/redirect?redirect_url=/');
 	}
 };
