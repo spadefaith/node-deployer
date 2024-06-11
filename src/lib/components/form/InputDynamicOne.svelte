@@ -12,6 +12,10 @@
 		if (props?.options?.length) {
 			datas = props.options;
 		}
+
+		return () => {
+			datas = [];
+		};
 	});
 
 	const deleteHandler = (o) => {

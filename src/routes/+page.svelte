@@ -34,7 +34,6 @@
 
 	const showAddForm = () => {
 		formMode = 'add';
-		controls = [];
 		controls = [
 			{
 				display: 'Name',
@@ -100,8 +99,7 @@
 			}
 		];
 
-		modalRef = new bootstrap.Modal('#exampleModal', {});
-		modalRef.show();
+		openModal();
 	};
 
 	const showEditForm = async (data) => {
@@ -110,7 +108,6 @@
 		const envs = await Fetch(createUrl(`${location.origin}/api/app/env`, { app_id: data.app_id }), {
 			method: 'GET'
 		});
-		controls = [];
 		controls = [
 			{
 				display: 'App ID',
@@ -145,8 +142,20 @@
 			}
 		];
 
-		modalRef = new bootstrap.Modal('#exampleModal', {});
+		openModal();
+	};
+
+	const openModal = () => {
+		const el: any = document.getElementById('exampleModal');
+		modalRef = new bootstrap.Modal(el, {});
 		modalRef.show();
+
+		if (!el.hasEvent) {
+			el.addEventListener('hidden.bs.modal', function (event) {
+				controls = [];
+			});
+			el.hasEvent = true;
+		}
 	};
 
 	const submitAddHandler = async (o) => {
