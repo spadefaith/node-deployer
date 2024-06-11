@@ -1,3 +1,4 @@
+import AppConfig from '$lib/AppConfig';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -15,7 +16,7 @@ export default {
 	staging: {
 		username: 'root',
 		password: 'root',
-		storage: path.join(__dirname, '../database', 'db_staging.sqlite'),
+		storage: path.join(__dirname, '../../../db/database', 'db_staging.sqlite'),
 		host: 'localhost',
 		dialect: 'sqlite',
 		logging: console.log
