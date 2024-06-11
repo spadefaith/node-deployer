@@ -18,7 +18,8 @@ export type PayloadType = {
 	repo: string;
 	provider?: string;
 	persist: boolean;
-	is_remove: boolean;
+	is_remove?: boolean;
+	is_exist?: boolean;
 };
 export const beforeCreate = async (props: { data: PayloadType }) => {
 	const data = props.data;
@@ -29,15 +30,16 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 	if (AppConfig.IS_BUILD) {
 		p = '../../../../apps';
 	}
-
 	const root = path.join(__dirname, `${p}/${appName}`);
+	const isExist = data.is_exist != undefined ? data.is_exist : fs.existsSync(root);
 
-	console.log(29, root);
+	console.log(29, isExist, root);
 
 	if (data.is_remove) {
 		fs.rmSync(root, { recursive: true, force: true });
 	}
-	if (!fs.existsSync(root)) {
+	if (!isExist) {
+		fs.rmSync(root, { recursive: true, force: true });
 		fs.mkdirSync(root, { recursive: true });
 	}
 
@@ -52,19 +54,20 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 			compose_path: root,
 			root_path: root,
 			repo: data.repo,
-			webhook_url: `${AppConfig.HOOK_BASE_URL}/${provider}/${name}/${data.branch}`
+			webhook_url: `${AppConfig.HOOK_BASE_URL}/${provider}/${name}/${data.branch}`,
+			is_exist: isExist
 		}
 	};
 };
 
 export const afterCreate = async (props: {
 	mutated: any;
-	data: AppsCreationAttributes;
+	data: AppsCreationAttributes & { is_exist: boolean };
 	payload: PayloadType;
 }) => {
 	const appId = props.mutated.app_id;
 	const keys = Object.keys(props.payload.env);
-	const { root_path, repo, branch, name, webhook_url } = props.data;
+	const { root_path, repo, branch, name, webhook_url, is_exist } = props.data;
 	const envs = props.payload.env;
 	const content = await toEnv(envs);
 	if (keys.length) {
@@ -90,12 +93,26 @@ export const afterCreate = async (props: {
 	 * deploy
 	 */
 	shell.cd(root_path);
-	const clone = shell.exec(`git clone --branch=${branch} ${repo} ${root_path} `);
-	if (clone.code != 0) {
-		console.log(`git clone --branch=${branch} ${repo} ${root_path} `);
 
-		throw new Error(clone.stderr);
+	if (is_exist) {
+		const clone = shell.exec(`git pull origin ${branch}`, {
+			//@ts-ignore
+			cwd: root_path
+		});
+		if (clone.code != 0) {
+			console.log(`git pull origin ${branch}`);
+
+			throw new Error(clone.stderr);
+		}
+	} else {
+		const clone = shell.exec(`git clone --branch=${branch} ${repo} ${root_path} `);
+		if (clone.code != 0) {
+			console.log(`git clone --branch=${branch} ${repo} ${root_path} `);
+
+			throw new Error(clone.stderr);
+		}
 	}
+
 	await fs.writeFileSync(`${root_path}/.env`, content);
 
 	shell.exec('pwd');
