@@ -4,11 +4,17 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+let p = '../database';
+
+if (AppConfig.IS_BUILD == 1) {
+	p = '../../../db/database';
+}
+
 export default {
 	development: {
 		username: 'root',
 		password: 'root',
-		storage: path.join(__dirname, '../database', 'db_dev.sqlite'),
+		storage: path.join(__dirname, p, 'db_dev.sqlite'),
 		host: 'localhost',
 		dialect: 'sqlite',
 		logging: console.log
@@ -16,7 +22,7 @@ export default {
 	staging: {
 		username: 'root',
 		password: 'root',
-		storage: path.join(__dirname, '../../../db/database', 'db_staging.sqlite'),
+		storage: path.join(__dirname, p, 'db_staging.sqlite'),
 		host: 'localhost',
 		dialect: 'sqlite',
 		logging: console.log
@@ -24,7 +30,7 @@ export default {
 	production: {
 		username: 'root',
 		password: 'root',
-		storage: path.join(__dirname, '../database', 'db_prod.sqlite'),
+		storage: path.join(__dirname, p, 'db_prod.sqlite'),
 		host: 'localhost',
 		dialect: 'sqlite',
 		logging: console.log
