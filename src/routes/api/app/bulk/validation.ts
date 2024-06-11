@@ -6,7 +6,8 @@ export const bulkValidation = async (body) => {
 			name: z.string(),
 			env: z.any(),
 			branch: z.string(),
-			repo: z.string()
+			repo: z.string(),
+			is_remove: z.boolean().optional()
 		})
 	);
 
