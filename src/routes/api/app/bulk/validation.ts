@@ -4,7 +4,7 @@ export const bulkValidation = async (body) => {
 	const schema = z.array(
 		z.object({
 			name: z.string(),
-			env: z.string(),
+			env: z.any(),
 			branch: z.string(),
 			repo: z.string()
 		})
