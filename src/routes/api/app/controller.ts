@@ -8,6 +8,7 @@ import shell from 'shelljs';
 import path from 'node:path';
 import fs from 'node:fs';
 import { afterCreate, beforeCreate, beforeDelete, type PayloadType } from './lifecycle';
+import LoopService from '$lib/services/LoopService';
 const __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname)));
 
 export const create = async (data: PayloadType) => {
@@ -157,4 +158,27 @@ export const update = async (data: PayloadType & { app_id: number }) => {
 			throw new Error(deploy.stderr);
 		}
 	}
+};
+
+export const bulkCreate = async (data: {
+	name: string;
+	env: string;
+	branch: string;
+	repo: string;
+}) => {
+	await LoopService(data, async (item, index) => {
+		try {
+			await create({
+				name: item.name,
+				env: item.env,
+				branch: item.branch,
+				repo: item.repo,
+				persist: true
+			});
+		} catch (err) {
+			console.log(171, item);
+			console.log(172, err);
+			return Promise.resolve({});
+		}
+	});
 };
