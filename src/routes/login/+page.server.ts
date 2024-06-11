@@ -45,6 +45,6 @@ export const actions = {
 		});
 
 		console.log(20, 'redirect /redirect?redirect_url=/');
-		throw redirect(302, '/redirect?redirect_url=/');
+		return redirect(302, '/redirect?redirect_url=/');
 	}
 };

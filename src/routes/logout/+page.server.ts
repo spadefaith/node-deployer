@@ -9,5 +9,5 @@ export const load = (async (event) => {
 		secure: true
 	});
 
-	throw redirect(302, '/redirect?redirect_url=/login');
+	return redirect(302, '/redirect?redirect_url=/login');
 }) satisfies PageServerLoad;

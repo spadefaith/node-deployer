@@ -13,17 +13,17 @@ export const load = (async (event) => {
 	}, {});
 
 	if (!cookies['x-token']) {
-		throw redirect(302, '/redirect?redirect_url=/logout');
+		return redirect(302, '/redirect?redirect_url=/logout');
 	}
 
 	try {
 		const isVerified = jwt.verify(cookies['x-token'], 'deployer');
 
 		if (!isVerified) {
-			throw redirect(302, '/redirect?redirect_url=/logout');
+			return redirect(302, '/redirect?redirect_url=/logout');
 		}
 	} catch (err) {
-		throw redirect(302, '/redirect?redirect_url=/logout');
+		return redirect(302, '/redirect?redirect_url=/logout');
 	}
 
 	return { apps: [] };
