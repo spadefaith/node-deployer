@@ -34,6 +34,7 @@
 
 	const showAddForm = () => {
 		formMode = 'add';
+		controls = [];
 		controls = [
 			{
 				display: 'Name',
@@ -109,7 +110,7 @@
 		const envs = await Fetch(createUrl(`${location.origin}/api/app/env`, { app_id: data.app_id }), {
 			method: 'GET'
 		});
-
+		controls = [];
 		controls = [
 			{
 				display: 'App ID',
