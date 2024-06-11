@@ -18,6 +18,7 @@ export type PayloadType = {
 	repo: string;
 	provider?: string;
 	persist: boolean;
+	is_remove: boolean;
 };
 export const beforeCreate = async (props: { data: PayloadType }) => {
 	const data = props.data;
@@ -25,8 +26,14 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 	const appName = `${name}-${data.branch}`;
 	const root = path.join(__dirname, `../../../../../apps/${appName}`);
 
-	fs.rmSync(root, { recursive: true, force: true });
-	fs.mkdirSync(root, { recursive: true });
+	console.log(29, root);
+
+	if (data.is_remove) {
+		fs.rmSync(root, { recursive: true, force: true });
+	}
+	if (!fs.existsSync(root)) {
+		fs.mkdirSync(root, { recursive: true });
+	}
 
 	const provider = getProvider(data.repo) || props?.data?.provider;
 
