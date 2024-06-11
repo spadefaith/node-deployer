@@ -1,11 +1,10 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { redeploy } from '../controller';
 
-export const POST: RequestHandler = async (ctx) => {
+export const GET: RequestHandler = async (ctx) => {
 	try {
-		const body = await ctx.request.json();
-
-		await redeploy(body);
+		const appId = await ctx.url.searchParams.get('app_id');
+		await redeploy({ app_id: appId });
 
 		return json({ status: 1, data: true });
 	} catch (err) {

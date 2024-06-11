@@ -4,6 +4,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
-		port: 8990
+		port: 8990,
+		watch: {
+			ignored: ['db/**/*']
+		}
 	}
 });

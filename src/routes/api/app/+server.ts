@@ -1,6 +1,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { create, paginate, remove, update } from './controller';
 import { searchQueryToObj } from '$lib/utils/api-utils';
+import { createValidation, updateValidation } from './validation';
 
 export const GET: RequestHandler = async (ctx) => {
 	try {
@@ -20,6 +21,8 @@ export const POST: RequestHandler = async (ctx) => {
 	try {
 		const body = await ctx.request.json();
 
+		await createValidation(body);
+
 		const data = await create(body);
 
 		return json({ status: 1, data: true });
@@ -32,6 +35,8 @@ export const POST: RequestHandler = async (ctx) => {
 export const PUT: RequestHandler = async (ctx) => {
 	try {
 		const body = await ctx.request.json();
+
+		await updateValidation(body);
 
 		const data = await update(body);
 

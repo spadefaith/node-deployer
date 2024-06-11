@@ -33,7 +33,7 @@ export const actions = {
 			throw fail(400, { message: 'wrong password', error: true });
 		}
 
-		const token = jwt.sign({}, 'deployer', { expiresIn: `${15 * 60 * 1000}` });
+		const token = jwt.sign({}, 'deployer', { expiresIn: `${15 * 60 * 1000 * 60}` });
 
 		console.log(19, token);
 

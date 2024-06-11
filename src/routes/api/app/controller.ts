@@ -16,6 +16,17 @@ export const create = async (data: PayloadType) => {
 
 	const created = await Models.Apps.create(beforeCreateData.data);
 
+	await Models.Apps.update(
+		{
+			webhook_url: `${AppConfig.HOOK_BASE_URL}/api/app/redeploy?app_id=${created.app_id}`
+		},
+		{
+			where: {
+				app_id: created.app_id
+			}
+		}
+	);
+
 	const afterCreateData = await afterCreate({
 		mutated: created,
 		data: beforeCreateData.data,
@@ -67,7 +78,7 @@ export const paginate = async (params) => {
 	};
 };
 
-export const redeploy = async (data: { app_id: number }) => {
+export const redeploy = async (data: { app_id: string }) => {
 	const find = await Models.Apps.findOne({
 		raw: true,
 		where: {
@@ -115,7 +126,7 @@ export const appEnv = async (data: { app_id: string }) => {
 	});
 };
 
-export const update = async (data: PayloadType & { app_id: number }) => {
+export const update = async (data: PayloadType & { app_id: number; webhook_url: string }) => {
 	const appId = data.app_id;
 	const find = await Models.Apps.findOne({
 		raw: true,
@@ -127,6 +138,20 @@ export const update = async (data: PayloadType & { app_id: number }) => {
 	const { root_path } = find;
 	const envs = data.env;
 	const keys = Object.keys(envs);
+
+	await Models.Apps.update(
+		{
+			webhook_url: data.webhook_url
+		},
+		{
+			where: {
+				app_id: appId
+			}
+		}
+	);
+
+	console.log(143, root_path);
+
 	if (keys.length) {
 		const content = await toEnv(envs);
 		const restruct = keys.map((key) => {

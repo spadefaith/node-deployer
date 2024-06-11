@@ -63,6 +63,28 @@
 				validator: 'required=true'
 			},
 			{
+				display: 'Provider',
+				name: 'provider',
+				placeholder: 'provider',
+				tag: 'select',
+				label: true,
+				options: [
+					{
+						display: 'GITHUB',
+						value: 'github'
+					},
+					{
+						display: 'BITBUCKET',
+						value: 'bitbucket'
+					},
+					{
+						display: 'GITLAB',
+						value: 'gitlab'
+					}
+				],
+				validator: 'required=true'
+			},
+			{
 				display: 'Environment Variables',
 				tag: 'text'
 			},
@@ -95,6 +117,16 @@
 				type: 'hidden',
 				name: 'app_id',
 				value: data.app_id
+			},
+			{
+				display: 'Webhook URL',
+				name: 'webhook_url',
+				placeholder: 'webhook url',
+				tag: 'input',
+				type: 'text',
+				label: true,
+				validator: 'required=true',
+				value: data.webhook_url || null
 			},
 			{
 				display: 'Environment Variables',
@@ -241,12 +273,12 @@
 		} else if (action == 'redeploy') {
 			try {
 				isLoading = true;
-				const response = await Fetch('/api/app/redeploy', {
-					method: 'POST',
+				const url = createUrl(`${location.origin}/api/app/redeploy`, { app_id: data.app_id });
+				const response = await Fetch(url, {
+					method: 'GET',
 					headers: {
 						'content-type': 'application/json'
-					},
-					body: JSON.stringify({ app_id: data.app_id })
+					}
 				});
 
 				isLoading = false;
@@ -305,6 +337,7 @@
 	<Table
 		props={{
 			column: [
+				{ title: 'ID', field: 'app_id', visible: true },
 				{ title: 'Name', field: 'name', visible: true },
 				{ title: 'Branch', field: 'branch', visible: true },
 				{

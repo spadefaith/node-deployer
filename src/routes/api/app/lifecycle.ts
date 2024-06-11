@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { Loop, getProvider, toEnv } from '$lib/utils/api-utils';
 import AppConfig from '$lib/AppConfig';
-import type { AppsCreationAttributes } from '$lib/models/Apps';
+import type { AppsAttributes, AppsCreationAttributes } from '$lib/models/Apps';
 import Models from '$lib/models';
 import { Op } from 'sequelize';
 const __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname)));
@@ -35,15 +35,10 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 
 	console.log(29, isExist, root);
 
-	if (data.is_remove) {
-		fs.rmSync(root, { recursive: true, force: true });
-	}
-	if (!isExist) {
-		fs.rmSync(root, { recursive: true, force: true });
-		fs.mkdirSync(root, { recursive: true });
-	}
+	fs.rmSync(root, { recursive: true, force: true });
+	fs.mkdirSync(root, { recursive: true });
 
-	const provider = getProvider(data.repo) || props?.data?.provider;
+	const provider = props?.data?.provider || getProvider(data.repo);
 
 	props.data.provider = provider;
 
@@ -54,7 +49,6 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 			compose_path: root,
 			root_path: root,
 			repo: data.repo,
-			webhook_url: `${AppConfig.HOOK_BASE_URL}/${provider}/${name}/${data.branch}`,
 			is_exist: isExist
 		}
 	};
@@ -94,23 +88,11 @@ export const afterCreate = async (props: {
 	 */
 	shell.cd(root_path);
 
-	if (is_exist) {
-		const clone = shell.exec(`git pull origin ${branch}`, {
-			//@ts-ignore
-			cwd: root_path
-		});
-		if (clone.code != 0) {
-			console.log(`git pull origin ${branch}`);
+	const clone = shell.exec(`git clone --branch=${branch} ${repo} ${root_path} `);
+	if (clone.code != 0) {
+		console.log(`git clone --branch=${branch} ${repo} ${root_path} `);
 
-			throw new Error(clone.stderr);
-		}
-	} else {
-		const clone = shell.exec(`git clone --branch=${branch} ${repo} ${root_path} `);
-		if (clone.code != 0) {
-			console.log(`git clone --branch=${branch} ${repo} ${root_path} `);
-
-			throw new Error(clone.stderr);
-		}
+		throw new Error(clone.stderr);
 	}
 
 	await fs.writeFileSync(`${root_path}/.env`, content);
@@ -185,3 +167,5 @@ export const beforeDelete = async (props: { app_id: number }) => {
 export const afterDelete = async (props: { app_id: number }) => {
 	console.log(108, props);
 };
+
+export const beforeUpdate = async (props: { data: AppsAttributes & { provider: string } }) => {};
