@@ -41,7 +41,7 @@ export const actions = {
 			httpOnly: true,
 			path: '/',
 			sameSite: 'strict',
-			secure: true
+			secure: false
 		});
 
 		console.log(20, 'redirect /redirect?redirect_url=/');
