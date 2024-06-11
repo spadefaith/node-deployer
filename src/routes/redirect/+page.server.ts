@@ -7,5 +7,5 @@ export const load = (async (event) => {
 
 	const redirectUrl = searchParams.get('redirect_url');
 
-	return redirect(302, redirectUrl);
+	throw redirect(302, redirectUrl);
 }) satisfies PageServerLoad;
