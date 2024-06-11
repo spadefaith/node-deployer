@@ -4,7 +4,7 @@
 
 	export let data: PageData;
 
-	export let form: ActionData;
+	export let form: ActionData | any;
 </script>
 
 <Container>
@@ -21,7 +21,7 @@
 			<InputGroup>
 				<Input type="password" class="input" id="password" name="password" />
 			</InputGroup>
-
+			<span style="color:red">{form && form.error && form.message ? form.message : ''}</span>
 			<div class="my-3">
 				<Button type="submit" color="success">Submit</Button>
 			</div>

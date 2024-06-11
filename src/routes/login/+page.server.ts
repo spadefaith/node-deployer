@@ -10,43 +10,38 @@ export const load = (async () => {
 
 export const actions = {
 	login: async (event) => {
-		try {
-			const data = await event.request.formData();
+		const data = await event.request.formData();
 
-			const username: string = data.get('username') as any;
-			const password: string = data.get('password') as any;
+		const username: string = data.get('username') as any;
+		const password: string = data.get('password') as any;
 
-			const find = await Models.Accounts.findOne({
-				raw: true,
-				where: {
-					username: username
-				}
-			});
-
-			if (!find) {
-				throw new Error('account not found');
+		const find = await Models.Accounts.findOne({
+			raw: true,
+			where: {
+				username: username
 			}
-			console.log(18, find);
+		});
 
-			const compare = bcrypt.compareSync(password, find.password);
-
-			if (!compare) {
-				throw new Error('wrong password');
-			}
-
-			const token = jwt.sign({}, 'deployer', { expiresIn: `${15 * 60 * 1000}` });
-
-			event.cookies.set('x-token', token, {
-				httpOnly: true,
-				path: '/',
-				sameSite: 'strict',
-				secure: true
-			});
-
-			return redirect(302, '/redirect?redirect_url=/');
-		} catch (err) {
-			console.log(err);
-			return fail(400, { message: err.message, error: true });
+		if (!find) {
+			return fail(400, { message: 'account not found', error: true });
 		}
+		console.log(18, find);
+
+		const compare = bcrypt.compareSync(password, find.password);
+
+		if (!compare) {
+			return fail(400, { message: 'wrong password', error: true });
+		}
+
+		const token = jwt.sign({}, 'deployer', { expiresIn: `${15 * 60 * 1000}` });
+
+		event.cookies.set('x-token', token, {
+			httpOnly: true,
+			path: '/',
+			sameSite: 'strict',
+			secure: true
+		});
+
+		redirect(302, '/redirect?redirect_url=/');
 	}
 };
