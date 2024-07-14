@@ -8,7 +8,7 @@ export const createValidation = async (body) => {
 		repo: z.string(),
 		is_remove: z.boolean().optional(),
 		is_exist: z.boolean().optional(),
-		provider: z.boolean().optional()
+		provider: z.string().optional()
 	});
 
 	const validation = await schema.safeParseAsync(body);
