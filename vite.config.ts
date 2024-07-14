@@ -6,7 +6,7 @@ export default defineConfig({
 	server: {
 		port: 8990,
 		watch: {
-			ignored: ['db/**/*']
+			ignored: ['db/**/*', 'apps/**/*']
 		}
 	}
 });
