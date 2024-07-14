@@ -14,7 +14,18 @@ const __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).p
 export const create = async (data: PayloadType) => {
 	const beforeCreateData: any = await beforeCreate({ data: data });
 
-	const created = await Models.Apps.create(beforeCreateData.data);
+	const find = await Models.Apps.findOne({
+		raw: true,
+		where: {
+			name: beforeCreateData.data.name
+		}
+	});
+	let created = null;
+	if (find) {
+		created = find;
+	} else {
+		created = await Models.Apps.create(beforeCreateData.data);
+	}
 
 	await Models.Apps.update(
 		{

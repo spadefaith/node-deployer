@@ -45,7 +45,7 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 	return {
 		data: {
 			branch: data.branch,
-			name: data.name,
+			name: `${data.name}-${data.branch}`,
 			compose_path: root,
 			root_path: root,
 			repo: data.repo,
