@@ -58,6 +58,9 @@ function recurse() {
 			hookPayload = parseJson(conf.payload);
 		}
 
+		console.log(61, hookPayload);
+		console.log(62, conf);
+
 		if (hookPayload.branch != conf.branch) {
 			console.error(
 				`skip not hook branch (${hookPayload.branch}) is not equal to app branch ${conf.payload}`
