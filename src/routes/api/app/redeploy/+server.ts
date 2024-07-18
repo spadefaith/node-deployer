@@ -7,7 +7,7 @@ export const POST: RequestHandler = async (ctx) => {
 		const appId = await ctx.url.searchParams.get('app_id');
 		// await redeploy({ app_id: appId });
 
-		await redeployHandler({ app_id: appId });
+		await redeployHandler({ app_id: appId }, await ctx.request.json());
 
 		return json({ status: 1, data: true });
 	} catch (err) {

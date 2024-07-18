@@ -1,10 +1,17 @@
 import Models from '$lib/models';
 import moment from 'moment';
 import { redeploy } from '../controller';
+import {
+	getProvider,
+	parseBitbucket,
+	parseGithub,
+	parseGitlab,
+	parseJson
+} from '$lib/utils/api-utils';
 
 let queue = [];
 
-export const redeployHandler = async (params: { app_id: string }) => {
+export const redeployHandler = async (params: { app_id: string }, payload) => {
 	const find = await Models.Apps.findOne({
 		raw: true,
 		where: {
@@ -16,7 +23,11 @@ export const redeployHandler = async (params: { app_id: string }) => {
 		throw new Error('app not found');
 	}
 
-	queue.push(params);
+	queue.push({
+		...params,
+		...find,
+		payload
+	});
 
 	return true;
 };
@@ -35,6 +46,28 @@ function recurse() {
 	// console.log(111, `current cron id ${id}`, conf);
 
 	if (conf.app_id) {
+		const provider = getProvider(conf.repo);
+		let hookPayload: { branch: string; name: string; message: string } = {} as any;
+		if (provider == 'github') {
+			hookPayload = parseGithub(conf.payload);
+		} else if (provider == 'gitlab') {
+			hookPayload = parseGitlab(conf.payload);
+		} else if (provider == 'bitbucket') {
+			hookPayload = parseBitbucket(conf.payload);
+		} else if (provider == 'json') {
+			hookPayload = parseJson(conf.payload);
+		}
+
+		if (hookPayload.branch != conf.branch) {
+			console.error(
+				`skip not hook branch (${hookPayload.branch}) is not equal to app branch ${conf.payload}`
+			);
+
+			interval();
+
+			return;
+		}
+
 		/**
 		 * stop the cron
 		 */
