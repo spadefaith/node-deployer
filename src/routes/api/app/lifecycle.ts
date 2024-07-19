@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv';
 dotenv.config({});
 
+console.log(4, dotenv);
+
 import shell from 'shelljs';
 import path from 'node:path';
 import fs from 'node:fs';
