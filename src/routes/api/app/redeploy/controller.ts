@@ -58,6 +58,7 @@ function recurse() {
 			hookPayload = parseJson(conf.payload);
 		}
 
+		console.log(60, provider);
 		console.log(61, hookPayload);
 		console.log(62, conf);
 
