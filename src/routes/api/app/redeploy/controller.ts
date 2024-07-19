@@ -44,7 +44,7 @@ function recurse() {
 	queue = queue.slice(1, queue.length);
 
 	const provider = conf.provider;
-	console.log(60, conf);
+	console.log(60, provider);
 	if (conf.app_id) {
 		let hookPayload: { branch: string; name: string; message: string } = {} as any;
 		if (provider == 'github') {
@@ -62,7 +62,7 @@ function recurse() {
 
 		if (hookPayload.branch != conf.branch) {
 			console.error(
-				`skip not hook branch (${hookPayload.branch}) is not equal to app branch ${conf.payload}`
+				`skip not hook branch (${hookPayload.branch}) is not equal to app branch ${conf.branch}`
 			);
 
 			interval();
