@@ -102,16 +102,14 @@ export const redeploy = async (data: { app_id: string }) => {
 
 		fs.rmSync(root_path, { recursive: true, force: true });
 		fs.mkdirSync(root_path, { recursive: true });
-		console.log(1);
+
 		const envs = await restructEnv(find);
-		console.log(2);
+
 		const content = await toEnv(envs);
-		console.log(3);
+
 		shell.cd(root_path);
-		console.log(4);
 		const clone = shell.exec(`git clone --branch=${branch} ${repo} ${root_path} `);
-		console.log(5);
-		console.log('cloning repository');
+
 		if (clone.code != 0) {
 			console.log(`git clone --branch=${branch} ${repo} ${root_path} `);
 			console.log(117, clone);
