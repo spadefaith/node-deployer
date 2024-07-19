@@ -1,4 +1,4 @@
-require('dotenv/config');
+require('dotenv').config({});
 const SequelizeAuto = require('sequelize-auto');
 const path = require('path');
 const shelljs = require('shelljs');
