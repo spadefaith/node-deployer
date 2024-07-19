@@ -1,4 +1,6 @@
 {
 	"name": "migrator",
-	"type": "commonjs"
+	"type": "commonjs",
+	"private": true,
+	"dependencies": {}
 }

@@ -1,4 +1,6 @@
 import type { Sequelize } from "sequelize";
+import { SequelizeMeta as _SequelizeMeta } from "./SequelizeMeta";
+import type { SequelizeMetaAttributes, SequelizeMetaCreationAttributes } from "./SequelizeMeta";
 import { Accounts as _Accounts } from "./Accounts";
 import type { AccountsAttributes, AccountsCreationAttributes } from "./Accounts";
 import { Apps as _Apps } from "./Apps";
@@ -13,6 +15,7 @@ import { Roles as _Roles } from "./Roles";
 import type { RolesAttributes, RolesCreationAttributes } from "./Roles";
 
 export {
+  _SequelizeMeta as SequelizeMeta,
   _Accounts as Accounts,
   _Apps as Apps,
   _Envs as Envs,
@@ -22,6 +25,8 @@ export {
 };
 
 export type {
+  SequelizeMetaAttributes,
+  SequelizeMetaCreationAttributes,
   AccountsAttributes,
   AccountsCreationAttributes,
   AppsAttributes,
@@ -37,6 +42,7 @@ export type {
 };
 
 export function initModels(sequelize: Sequelize) {
+  const SequelizeMeta = _SequelizeMeta.initModel(sequelize);
   const Accounts = _Accounts.initModel(sequelize);
   const Apps = _Apps.initModel(sequelize);
   const Envs = _Envs.initModel(sequelize);
@@ -54,6 +60,7 @@ export function initModels(sequelize: Sequelize) {
   Roles.hasMany(RolePermissions, { as: "role_permissions", foreignKey: "role_id"});
 
   return {
+    SequelizeMeta: SequelizeMeta,
     Accounts: Accounts,
     Apps: Apps,
     Envs: Envs,

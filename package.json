@@ -13,8 +13,8 @@
 		"sass": "sass  --no-source-map --watch src/styles/index.scss static/styles/index.css",
 		"copy": "copy-files-from-to",
 		"start": "NODE_OPTIONS='-r dotenv/config' node index.mjs",
-		"db:models": "tsx db/scripts/auto.ts",
-		"db:migrate": "sequelize db:migrate"
+		"db:models": "tsx db/scripts/auto.js",
+		"db:migrate": "node_modules/.bin/sequelize db:migrate "
 	},
 	"type": "module",
 	"dependencies": {
@@ -50,6 +50,7 @@
 		"sass": "^1.77.4",
 		"sequelize": "^6.37.2",
 		"sequelize-auto": "^0.8.8",
+		"sequelize-cli": "^6.6.2",
 		"shelljs": "^0.8.5",
 		"sqlite3": "^5.1.7",
 		"svelte": "^4.2.7",

@@ -146,13 +146,19 @@ export const update = async (data: PayloadType & { app_id: number; webhook_url: 
 		}
 	});
 
+	if (!find) {
+		throw new Error('app not found');
+	}
+
 	const { root_path } = find;
 	const envs = data.env;
 	const keys = Object.keys(envs);
 
 	await Models.Apps.update(
 		{
-			webhook_url: data.webhook_url
+			webhook_url: find.webhook_url || data.webhook_url,
+			name: find.name || data.name,
+			provider: find.provider || data.provider
 		},
 		{
 			where: {
@@ -160,8 +166,6 @@ export const update = async (data: PayloadType & { app_id: number; webhook_url: 
 			}
 		}
 	);
-
-	console.log(143, root_path);
 
 	if (keys.length) {
 		const content = await toEnv(envs);

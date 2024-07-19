@@ -13,6 +13,8 @@
 		props.changeHandler && props.changeHandler(value);
 		props.rawChangeHandler && props.rawChangeHandler(e);
 	};
+
+	console.log(17, props.value);
 </script>
 
 <div class="field">

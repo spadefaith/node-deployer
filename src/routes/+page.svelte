@@ -117,6 +117,16 @@
 				value: data.app_id
 			},
 			{
+				display: 'Name',
+				name: 'name',
+				placeholder: 'name',
+				tag: 'input',
+				type: 'text',
+				label: true,
+				validator: 'required=true',
+				value: data.name || null
+			},
+			{
 				display: 'Webhook URL',
 				name: 'webhook_url',
 				placeholder: 'webhook url',
@@ -125,6 +135,30 @@
 				label: true,
 				validator: 'required=true',
 				value: data.webhook_url || null
+			},
+			{
+				display: 'Provider',
+				name: 'provider',
+				placeholder: 'provider',
+				tag: 'select',
+				type: 'text',
+				label: true,
+				validator: 'required=true',
+				value: data.provider || null,
+				options: [
+					{
+						value: 'github',
+						display: 'GITHUB'
+					},
+					{
+						value: 'bitbucket',
+						display: 'BITBUCKET'
+					},
+					{
+						value: 'gitlab',
+						display: 'GITLAB'
+					}
+				]
 			},
 			{
 				display: 'Environment Variables',
@@ -313,6 +347,8 @@
 				}
 			});
 
+			console.log(350, response);
+
 			return response;
 		} catch (err) {
 			isLoading = false;
@@ -351,6 +387,7 @@
 				{ title: 'ID', field: 'app_id', visible: true },
 				{ title: 'Name', field: 'name', visible: true },
 				{ title: 'Branch', field: 'branch', visible: true },
+				{ title: 'Provider', field: 'provider', visible: false },
 				{
 					title: 'Repo',
 					field: 'repo',

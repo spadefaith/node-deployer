@@ -92,7 +92,13 @@ export function getFormData<T>(
 	return data as T;
 }
 
-export const sanitize = (str) => decodeURIComponent(String(str).replace(/<.*>/, ''));
+export const sanitize = (str) => {
+	try {
+		return decodeURIComponent(String(str).replace(/<.*>/, ''));
+	} catch (err) {
+		return str;
+	}
+};
 
 export const Fetch = async (url, conf) => {
 	const response = await fetch(url, conf);

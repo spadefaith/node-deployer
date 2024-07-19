@@ -17,11 +17,12 @@ export interface AppsAttributes {
   hooked_date?: Date;
   created_date?: Date;
   updated_date?: Date;
+  provider?: string;
 }
 
 export type AppsPk = "app_id";
 export type AppsId = Apps[AppsPk];
-export type AppsOptionalAttributes = "app_id" | "webhook_url" | "compose_path" | "root_path" | "repo" | "branch" | "name" | "category" | "status" | "created_by" | "modified_by" | "hooked_date" | "created_date" | "updated_date";
+export type AppsOptionalAttributes = "app_id" | "webhook_url" | "compose_path" | "root_path" | "repo" | "branch" | "name" | "category" | "status" | "created_by" | "modified_by" | "hooked_date" | "created_date" | "updated_date" | "provider";
 export type AppsCreationAttributes = Optional<AppsAttributes, AppsOptionalAttributes>;
 
 export class Apps extends Model<AppsAttributes, AppsCreationAttributes> implements AppsAttributes {
@@ -39,6 +40,7 @@ export class Apps extends Model<AppsAttributes, AppsCreationAttributes> implemen
   hooked_date?: Date;
   created_date?: Date;
   updated_date?: Date;
+  provider?: string;
 
   // Apps hasMany Envs via app_id
   envs!: Envs[];
@@ -122,6 +124,10 @@ export class Apps extends Model<AppsAttributes, AppsCreationAttributes> implemen
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    provider: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     }
   }, {
     sequelize,

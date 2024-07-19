@@ -1,5 +1,5 @@
-import 'dotenv/config';
-import path from 'node:path';
+require('dotenv').config({});
+const path = require('path');
 
 let p = '../database';
 

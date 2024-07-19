@@ -21,6 +21,9 @@ module.exports = function (Sequelize, DataTypes) {
 			repo: {
 				type: DataTypes.STRING(50)
 			},
+			provider: {
+				type: DataTypes.STRING(50)
+			},
 			branch: {
 				type: DataTypes.STRING(50)
 			},

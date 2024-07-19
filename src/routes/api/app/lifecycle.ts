@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import shell from 'shelljs';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -26,11 +27,8 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 	const name = data.name;
 	const appName = `${name}-${data.branch}`;
 
-	let p = '../../../../../apps';
-	if (AppConfig.IS_BUILD) {
-		p = '../../../../apps';
-	}
-	const root = path.join(__dirname, `${p}/${appName}`);
+	const root = path.join(process.env.PWD, '../apps', `${appName}`);
+
 	const isExist = data.is_exist != undefined ? data.is_exist : fs.existsSync(root);
 
 	console.log(29, isExist, root);
@@ -45,11 +43,12 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 	return {
 		data: {
 			branch: data.branch,
-			name: `${data.name}-${data.branch}`,
+			name: data.name,
 			compose_path: root,
 			root_path: root,
 			repo: data.repo,
-			is_exist: isExist
+			is_exist: isExist,
+			provider
 		}
 	};
 };
