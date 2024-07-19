@@ -3,7 +3,7 @@ import type { BitbucketMergePayloadType } from '../../types/bitbucket-merge-payl
 import type { BitbucketPushPayloadType } from '../../types/bitbucket-push-payload';
 
 export const parseBitbucket = (json) => {
-	console.log('parseBitbucket', JSON.stringify(json, null, 4));
+	// console.log('parseBitbucket', JSON.stringify(json, null, 4));
 	let branch, message, name, user;
 
 	if (json.pullrequest) {
@@ -25,13 +25,13 @@ export const parseBitbucket = (json) => {
 		}
 	}
 
-	console.log('parsedBitbucket', JSON.stringify({ branch, message, name, user }, null, 4));
+	// console.log('parsedBitbucket', JSON.stringify({ branch, message, name, user }, null, 4));
 
 	return { branch, message, name, user };
 };
 
 export const parseGithub = (json) => {
-	console.log('parseGithub', JSON.stringify(json || {}, null, 4));
+	// console.log('parseGithub', JSON.stringify(json || {}, null, 4));
 	let {
 		ref,
 		pusher: { name: username },
@@ -43,7 +43,7 @@ export const parseGithub = (json) => {
 };
 
 export const parseGitlab = (json) => {
-	console.log('parseGitlab', JSON.stringify(json || {}, null, 4));
+	// console.log('parseGitlab', JSON.stringify(json || {}, null, 4));
 	let {
 		ref,
 		user_username: name,
@@ -54,7 +54,7 @@ export const parseGitlab = (json) => {
 };
 
 export const parseJson = (json) => {
-	console.log('parseJson', JSON.stringify(json || {}, null, 4));
+	// console.log('parseJson', JSON.stringify(json || {}, null, 4));
 	return {
 		branch: json.branch,
 		name: json.name,
