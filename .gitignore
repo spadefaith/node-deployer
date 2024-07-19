@@ -12,3 +12,5 @@ vite.config.ts.timestamp-*
 db/database
 http
 apps
+config.json
+build-script.ts

@@ -1,11 +1,12 @@
+import * as dotenv from 'dotenv';
+dotenv.config({});
+
 import shell from 'shelljs';
 import path from 'node:path';
 import fs from 'node:fs';
 import { Loop, getProvider, toEnv } from '$lib/utils/api-utils';
 import type { AppsAttributes, AppsCreationAttributes } from '$lib/models/Apps';
 import Models from '$lib/models';
-import AppConfig from '$lib/AppConfig';
-
 export type PayloadType = {
 	name: string;
 	env: {
@@ -24,7 +25,7 @@ export const beforeCreate = async (props: { data: PayloadType }) => {
 	const name = data.name;
 	const appName = `${name}-${data.branch}`;
 
-	const root = path.join(AppConfig.PWD, '../apps', `${appName}`);
+	const root = path.join(process.env.PWD, '../apps', `${appName}`);
 
 	const isExist = data.is_exist != undefined ? data.is_exist : fs.existsSync(root);
 
