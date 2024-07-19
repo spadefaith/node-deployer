@@ -1,13 +1,10 @@
-import 'dotenv/config';
+// import 'dotenv/config';
 import shell from 'shelljs';
 import path from 'node:path';
 import fs from 'node:fs';
 import { Loop, getProvider, toEnv } from '$lib/utils/api-utils';
-import AppConfig from '$lib/AppConfig';
 import type { AppsAttributes, AppsCreationAttributes } from '$lib/models/Apps';
 import Models from '$lib/models';
-import { Op } from 'sequelize';
-const __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname)));
 
 export type PayloadType = {
 	name: string;
