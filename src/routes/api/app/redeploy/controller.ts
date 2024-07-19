@@ -98,7 +98,7 @@ function recurse() {
 				interval();
 			})
 			.catch((err) => {
-				console.log(err);
+				console.log(101, err.message);
 				console.log(`failed execute ${conf.name}`);
 				/**
 				 * rerun the cron
