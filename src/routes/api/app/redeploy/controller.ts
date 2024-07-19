@@ -43,10 +43,9 @@ function recurse() {
 	const conf = queue[0] || {};
 	queue = queue.slice(1, queue.length);
 
-	// console.log(111, `current cron id ${id}`, conf);
+	const provider = conf.provider;
 
 	if (conf.app_id) {
-		const provider = getProvider(conf.repo);
 		let hookPayload: { branch: string; name: string; message: string } = {} as any;
 		if (provider == 'github') {
 			hookPayload = parseGithub(conf.payload);
