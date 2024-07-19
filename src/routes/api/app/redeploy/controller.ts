@@ -44,7 +44,7 @@ function recurse() {
 	queue = queue.slice(1, queue.length);
 
 	const provider = conf.provider;
-	console.log(60, provider);
+	console.log(60, conf);
 	if (conf.app_id) {
 		let hookPayload: { branch: string; name: string; message: string } = {} as any;
 		if (provider == 'github') {
