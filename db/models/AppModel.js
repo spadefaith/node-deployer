@@ -1,4 +1,4 @@
-export default function (Sequelize, DataTypes) {
+module.exports = function (Sequelize, DataTypes) {
 	const entity = Sequelize.define(
 		'apps',
 		{
@@ -94,4 +94,4 @@ export default function (Sequelize, DataTypes) {
 	);
 
 	return entity;
-}
+};

@@ -1,4 +1,4 @@
-export default function EnvModel(Sequelize, DataTypes) {
+module.exports = function EnvModel(Sequelize, DataTypes) {
 	const entity = Sequelize.define(
 		'envs',
 		{
@@ -65,4 +65,4 @@ export default function EnvModel(Sequelize, DataTypes) {
 	);
 
 	return entity;
-}
+};

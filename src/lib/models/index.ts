@@ -1,22 +1,20 @@
-import Sequelize from "sequelize";
+import 'dotenv/config';
+import path from 'node:path';
+import Sequelize from 'sequelize';
 
+import { initModels } from './init-models';
 
-const env = import.meta.env.VITE_NODE_ENV;
-
-import conf from "../../../db/config/config.mjs";
-
-
-import { initModels } from "./init-models";
-const config = conf[env];
-
-// console.log(11, config);
 //@ts-ignore
 const sequelize = new Sequelize(
-  //@ts-ignore
-  config.database,
-  config.username,
-  config.password,
-  config
+	//@ts-ignore
+	null,
+	process.env.DB_USERNAME,
+	process.env.DB_PASSWORD,
+	{
+		storage: path.join(process.env.PWD, `/db/database/${process.env.DB_FILE}`),
+		host: process.env.DB_HOST,
+		dialect: process.env.DB_DIALECT
+	}
 );
 
 const Models = initModels(sequelize);
