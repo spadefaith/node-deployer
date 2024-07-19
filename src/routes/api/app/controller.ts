@@ -114,7 +114,7 @@ export const redeploy = async (data: { app_id: string }) => {
 		console.log('cloning repository');
 		if (clone.code != 0) {
 			console.log(`git clone --branch=${branch} ${repo} ${root_path} `);
-
+			console.log(117, clone);
 			throw new Error(clone.stderr);
 		}
 		await fs.writeFileSync(`${root_path}/.env`, content);
