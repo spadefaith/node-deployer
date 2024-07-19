@@ -2,7 +2,7 @@
 	"apps": [
 		{
 			"name": "deployer",
-			"script": "npm run start",
+			"script": "npm run dev",
 			"interpreter": "none"
 		}
 	]

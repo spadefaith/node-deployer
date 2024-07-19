@@ -1,4 +1,4 @@
-// import 'dotenv/config';
+import 'dotenv/config';
 import shell from 'shelljs';
 import path from 'node:path';
 import fs from 'node:fs';
