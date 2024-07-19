@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({});
 
 console.log(4, dotenv);
+console.log(5, process.env);
 
 import shell from 'shelljs';
 import path from 'node:path';
