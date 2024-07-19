@@ -12,7 +12,7 @@
 		"format": "prettier --write .",
 		"sass": "sass  --no-source-map --watch src/styles/index.scss static/styles/index.css",
 		"copy": "copy-files-from-to",
-		"start": "NODE_OPTIONS='-r dotenv/config' node index.mjs",
+		"start": "NODE_OPTIONS='-r dotenv/config' nodemon index.mjs",
 		"db:models": "tsx db/scripts/auto.js",
 		"db:migrate": "node_modules/.bin/sequelize db:migrate "
 	},
