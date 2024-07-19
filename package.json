@@ -3,8 +3,8 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev --host",
-		"build": "vite build",
+		"dev": "env-cmd vite dev --host",
+		"build": "env-cmd vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -12,7 +12,7 @@
 		"format": "prettier --write .",
 		"sass": "sass  --no-source-map --watch src/styles/index.scss static/styles/index.css",
 		"copy": "copy-files-from-to",
-		"start": "NODE_OPTIONS='-r dotenv/config' nodemon index.mjs",
+		"start": "env-cmd nodemon index.mjs",
 		"db:models": "tsx db/scripts/auto.js",
 		"db:migrate": "node_modules/.bin/sequelize db:migrate "
 	},
@@ -34,6 +34,7 @@
 		"compression": "^1.7.4",
 		"copy-files-from-to": "^3.11.0",
 		"dotenv": "^16.4.5",
+		"env-cmd": "^10.1.0",
 		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.43.0",
