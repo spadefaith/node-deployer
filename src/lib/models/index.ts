@@ -13,15 +13,10 @@ const sequelize = new Sequelize(
 	{
 		storage: path.join(process.env.PWD, `/db/database/${process.env.DB_FILE}`),
 		host: process.env.DB_HOST,
-		dialect: process.env.DB_DIALECT
+		dialect: process.env.DB_DIALECT,
+		logging: false
 	}
 );
-
-console.log(20, null, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
-	storage: path.join(process.env.PWD, `/db/database/${process.env.DB_FILE}`),
-	host: process.env.DB_HOST,
-	dialect: process.env.DB_DIALECT
-});
 
 const Models = initModels(sequelize);
 
