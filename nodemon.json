@@ -1,0 +1,6 @@
+{
+	"watch": ["src"],
+	"ignore": ["db/**/*", "apps/**/*", "node_modules"],
+	"ext": "ts,mjs,js,json,graphql,sh,bash,ejs",
+	"legacyWatch": true
+}
