@@ -123,7 +123,7 @@ export const restructEnv = async (app) => {
 	});
 
 	if (!findEvs.length) {
-		return null;
+		return {};
 	}
 
 	const restruct = await findEvs.reduce((accu, iter) => {

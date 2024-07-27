@@ -1,0 +1,8 @@
+{
+	"copyFiles": [
+		{
+			"from": "src/deploy.js",
+			"to": "build/deploy.js"
+		}
+	]
+}

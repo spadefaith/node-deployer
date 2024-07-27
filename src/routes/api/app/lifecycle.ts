@@ -1,12 +1,16 @@
-import * as dotenv from 'dotenv';
-dotenv.config({});
+import 'dotenv/config';
 
 import shell from 'shelljs';
 import path from 'node:path';
 import fs from 'node:fs';
 import { Loop, getProvider, toEnv } from '$lib/utils/api-utils';
 import type { AppsAttributes, AppsCreationAttributes } from '$lib/models/Apps';
+import workerpool from 'workerpool';
 import Models from '$lib/models';
+
+const PWD = process.env.PWD;
+const pool = workerpool.pool(path.join(PWD, 'deploy.js'));
+
 export type PayloadType = {
 	name: string;
 	env: {
@@ -60,7 +64,6 @@ export const afterCreate = async (props: {
 	const keys = Object.keys(props.payload.env);
 	const { root_path, repo, branch, name, webhook_url, is_exist } = props.data;
 	const envs = props.payload.env;
-	const content = await toEnv(envs);
 	if (keys.length) {
 		const restruct = keys.map((key) => {
 			return {
@@ -80,34 +83,34 @@ export const afterCreate = async (props: {
 		await Models.Envs.bulkCreate(restruct);
 	}
 
-	/**
-	 * deploy
-	 */
-	shell.cd(root_path);
+	await new Promise((res, rej) => {
+		let error;
 
-	const clone = shell.exec(`git clone --branch=${branch} ${repo} ${root_path} `);
-	if (clone.code != 0) {
-		console.log(`git clone --branch=${branch} ${repo} ${root_path} `);
-
-		throw new Error(clone.stderr);
-	}
-
-	await fs.writeFileSync(`${root_path}/.env`, content);
-
-	shell.exec('pwd');
-	shell.exec('ls -alt');
-	const deploy = await shell.exec(`docker compose down  && docker compose up --build -d `, {
-		//@ts-ignore
-		cwd: root_path,
-		env: envs
+		process.chdir(PWD);
+		pool
+			.exec('deploy', [
+				{
+					root_path,
+					branch,
+					repo,
+					envs
+				}
+			])
+			.then(function (result) {
+				console.log('Result: ' + result); // outputs 55
+			})
+			.catch(function (err) {
+				error = err.message;
+			})
+			.then(function () {
+				pool.terminate(); // terminate all workers when done
+				if (error) {
+					rej(error);
+				} else {
+					res(true);
+				}
+			});
 	});
-
-	if (deploy.code !== 0) {
-		throw new Error(deploy.stderr);
-	}
-
-	/**clean */
-	await shell.exec('docker system prune -f');
 
 	return {
 		...((await Models.Apps.findOne({
@@ -152,10 +155,14 @@ export const beforeDelete = async (props: { app_id: number }) => {
 			await shell.exec('docker system prune -f');
 
 			/** remove directory*/
-			fs.rmSync(find.root_path, { recursive: true, force: true });
 		} catch (err) {
 			console.log(153, err);
 		}
+
+		fs.rmSync(find.root_path, { recursive: true, force: true });
+
+		shell.cd(PWD);
+		process.chdir(PWD);
 	}
 
 	return find;

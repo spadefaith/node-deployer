@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import AppConfig from '$lib/AppConfig';
 
 import { getProvider, restructEnv, Loop } from '$lib/utils/api-utils';
@@ -9,7 +10,11 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { afterCreate, beforeCreate, beforeDelete, type PayloadType } from './lifecycle';
 import LoopService from '$lib/services/LoopService';
+import workerpool from 'workerpool';
 const __dirname = path.resolve(path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+
+const PWD = process.env.PWD;
+const pool = workerpool.pool(path.join(PWD, 'deploy.js'));
 
 export const create = async (data: PayloadType) => {
 	const beforeCreateData: any = await beforeCreate({ data: data });
@@ -105,28 +110,34 @@ export const redeploy = async (data: { app_id: string }) => {
 
 		const envs = await restructEnv(find);
 
-		const content = await toEnv(envs);
+		await new Promise((res, rej) => {
+			let error;
 
-		shell.cd(root_path);
-		const clone = shell.exec(`git clone --branch=${branch} ${repo} ${root_path} `);
-
-		if (clone.code != 0) {
-			console.log(`git clone --branch=${branch} ${repo} ${root_path} `);
-			console.log(117, clone);
-			throw new Error(clone.stderr);
-		}
-		await fs.writeFileSync(`${root_path}/.env`, content);
-		const deploy = await shell.exec(`docker compose down  && docker compose up --build -d `, {
-			//@ts-ignore
-			cwd: root_path,
-			env: envs
+			process.chdir(PWD);
+			pool
+				.exec('deploy', [
+					{
+						root_path,
+						branch,
+						repo,
+						envs
+					}
+				])
+				.then(function (result) {
+					console.log('Result: ' + result); // outputs 55
+				})
+				.catch(function (err) {
+					error = err.message;
+				})
+				.then(function () {
+					pool.terminate(); // terminate all workers when done
+					if (error) {
+						rej(error);
+					} else {
+						res(true);
+					}
+				});
 		});
-
-		if (deploy.code !== 0) {
-			throw new Error(deploy.stderr);
-		}
-
-		await shell.exec('docker system prune -f');
 	}
 };
 
